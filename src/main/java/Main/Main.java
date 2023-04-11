@@ -28,14 +28,22 @@ public class Main {
         int x1Length,x2Length;
         x1Length = bits.getBits(a1,b1,precision);
         x2Length = bits.getBits(a2,b2,precision);
-        //获取x1,x2的整数位数
-        int x1IntLength,x2IntLength;
-        x1IntLength = bits.getIntBits(a1,b1);
-        x2IntLength = bits.getIntBits(a2,b2);
 
-        Individual individual = new Individual(x1IntLength,x1Length,x2IntLength,x2Length);
-        System.out.println("X1:" + individual.deCodeX1());
-        System.out.println("X2:" + individual.deCodeX2());
+        double max = -9999;
+        double X1 = 0;
+        double X2 = 0;
+
+        for(int i = 0; i < 10000000; i++) {
+            Individual individual = new Individual(x1Length,a1,b1,x2Length,a2,b2);
+            if(individual.getFitness() > max) {
+                max = individual.getFitness();
+                X1 = individual.getX1();
+                X2 = individual.getX2();
+            }
+        }
+        System.out.println("max:"+max);
+        System.out.println("X1:" + X1);
+        System.out.println("X2:" + X2);
 
     }
 }
