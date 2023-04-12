@@ -2,10 +2,11 @@ package Individual;
 
 import Functions.ExperimentFuctions;
 
+
 import java.util.Random;
 
 
-public class Individual {
+public class Individual implements Comparable {
     //gene中包含两个：X1，X2
     private int[] geneX1;
     private final int geneX1Length;
@@ -97,6 +98,60 @@ public class Individual {
         this.fitness = new ExperimentFuctions().values(X1,X2);
     }
 
+    public Individual marry(Individual other) {
+        //交换X1
+        int[] newGeneX1 = cross(this.geneX1, other.geneX1, geneX1Length);
+        //交换X2
+        int[] newGeneX2 = cross(this.geneX2, other.geneX2, geneX2Length);
+
+        Individual newIndividual = other;
+        newIndividual.setGeneX1(newGeneX1);
+        newIndividual.setGeneX2(newGeneX2);
+        newIndividual.calculateFitness();
+        return newIndividual;
+    }
+    //通过两点交叉更新数组
+    public int[] cross(int[] array,int[] array2,int length) {
+
+        //随机获取两个交叉点进行交换
+        Random random = new Random();
+        int first = random.nextInt(length);
+        int second = random.nextInt(length);
+        int max = Math.max(first, second);
+        int min = Math.min(first,second);
+
+        for(int i = min; i < max ; i++){
+            int temp = array[i];
+            array[i] = array2[i];
+            array2[i] = temp;
+        }
+
+        return array;
+    }
+
+    //变异，每个基因位有Pm概率变异
+    public void mutation(double Pm) {
+        Random random = new Random();
+        //X1可能会产生变异
+        for(int i = 0; i < geneX1Length; i++) {
+            if(random.nextDouble() <= Pm) {
+                geneX1[i] = reverse(geneX1[i]);
+            }
+        }
+        //X2产生变异
+        for(int i = 0; i < geneX2Length; i++) {
+            if(random.nextDouble() <= Pm) {
+                geneX2[i] = reverse(geneX2[i]);
+            }
+        }
+        this.fitness = getFitness();
+    }
+    //基因翻转
+    public int reverse(int a) {
+        if(a == 0)
+            return 1;
+        return 0;
+    }
 
     public double getFitness(){
         return this.fitness;
@@ -109,10 +164,32 @@ public class Individual {
         return X2;
     }
 
+    public void setGeneX1(int[] geneX1) {
+        this.geneX1 = geneX1;
+    }
+    public void setGeneX2(int[] geneX2) {
+        this.geneX2 = geneX2;
+    }
+
+
+
+    //List降序排列
+    @Override
+    public int compareTo(Object o) {
+        if(this.fitness < ((Individual) o).getFitness())
+            return 1;
+        if(this.fitness > ((Individual)o).getFitness())
+            return -1;
+        return 0;
+    }
+
     public static void main(String[] args) {
         Individual individual = new Individual(10,-3.0,12.1,10,4.1,5.8);
         System.out.println("decodeX1:" + individual.deCodeX1());
         System.out.println("decodeX2:" + individual.deCodeX2());
         System.out.println(individual.getFitness());
     }
+
+
+
 }
