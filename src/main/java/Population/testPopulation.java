@@ -2,15 +2,17 @@ package Population;
 
 import Individual.Individual;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 
-public class Population {
-    private Individual[] individuals;
-    private static final int allnum = 400;   //种群最大容量
+public class testPopulation {
+    private final Individual[] individuals;
+    private static final int allnum = 20;   //种群最大容量
     private static int N = allnum;     //种群中目前数目
 
-    private static final int parentNum = 200;   //每次选择20个“父母”
+    private static final int parentNum = 20;   //每次选择20个“父母”
     private int[] Order = new int[2*allnum];
 
     private double[] addFitness;           //第i位存储i位之前所有fitness/sumFitness占比
@@ -23,7 +25,7 @@ public class Population {
     private double a2;
     private double b2;
 
-    public Population(int x1Length,double a1,double b1,int x2Length,double a2,double b2) {
+    public testPopulation(int x1Length, double a1, double b1, int x2Length, double a2, double b2) {
         this.x1Length = x1Length;
         this.a1 = a1;
         this.b1 = b1;
@@ -34,6 +36,7 @@ public class Population {
         //将种群数目初始化最大种群数目的两倍，防止出现数组越界情况
         individuals = new Individual[2*allnum];
         for(int i = 0; i < allnum; i++) {
+            assert individuals != null;
             individuals[i] = new Individual(x1Length,a1,b1,x2Length,a2,b2);
         }
     }
@@ -58,8 +61,6 @@ public class Population {
             addFitness[i] += addFitness[i-1];
         }
 
-       // System.out.println("最后一个的累计适应度为：****************" + addFitness[n-1]);
-
         //选择数目为parentNum的Parents
         choose(num);
     }
@@ -79,7 +80,6 @@ public class Population {
             }
             //通过Order数组来记录第i个数组偏移量
             Order[i] = order;
-            //System.out.println("order:*************" + order);
 
         }
     }
@@ -87,17 +87,17 @@ public class Population {
     //从获得的parents，根据概率pc后去选择是否后代
     public void generateChildren(double Pc) {
         //从初始数目为allnum种群中，选择parentNum个父母
+        Order = new int[2*allnum];
         selectIndividuals(allnum,parentNum);
         //产生后代
         Random random = new Random();
         for(int i = 0; i < parentNum-1; i+=2) {
             if(random.nextDouble() <= Pc) {
-                Individual father = new Individual(individuals[Order[i]]);
-                Individual mother = new Individual(individuals[Order[i+1]]);
+                Individual father = individuals[Order[i]];
+                Individual mother = individuals[Order[i+1]];
 
                 //种群数目加一
-                individuals[N++] = new Individual(father.marry(mother));
-                //System.out.println("N:" + N + "individuals:**************" + individuals[N-1].getFitness());
+                individuals[N++] = father.marry(mother);
             }
         }
     }
@@ -107,72 +107,13 @@ public class Population {
     public void mutation(double Pm) {
         //对种群中的N个个体进行变异
         for(int i = 0; i < N; i++) {
-            //System.out.println("*************"+individuals[i].getFitness());
             individuals[i].mutation(Pm);
-            //System.out.println("****************" + individuals[i].getFitness());
         }
     }
 
-    //先保留max个个体
-    public Individual[] betterIndividual() {
-
-        //因为java机制，如果直接返回individuals，那么就相当于起别名
-        Individual[] tmp = new Individual[N];
-
-        for(int i = 0; i < N; i++) {
-            tmp[i] = new Individual(individuals[i]);
-        }
-        /*
-        for(int i = 0; i < N; i++) {
-            for(int j = 0; j < N - i - 1; j++) {
-                if(tmp[j].getFitness() < tmp[j+1].getFitness()) {
-                    exch(tmp[j],tmp[j+1]);
-                }
-            }
-        }
-         */
-        List<Individual> list = new ArrayList<>();
-        for(int i = 0; i < N; i++) {
-            list.add(tmp[i]);
-        }
-        list.sort(Individual::compareTo);
-
-        Individual[] temp = new Individual[10];
-        for(int i = 0; i < 10; i++) {
-            temp[i] = new Individual(list.get(i));
-        }
-        return temp;
-    }
-
-    //将长度为length的Individual数组放在，从individuals的begin开始的地方
-    public void setIndividuals(Individual[] temp,int length,int begin) {
-        int i = 0;
-        int j = begin;
-        while(i < length) {
-            individuals[j] = new Individual(temp[i]);
-            i++;
-            j++;
-        }
-    }
-
-    //淘汰一些个体，对种群进行更新
-    public void update() {
-
-        //从种群数目为N，选择allnum个个体
-        //通过order记录偏移量
-        selectIndividuals(N,allnum);
-        Individual[] tmp = new Individual[allnum];
-        for(int i = 0; i < allnum; i++) {
-            tmp[i] = new Individual(individuals[Order[i]]);
-        }
-        for(int i = 0; i < allnum; i++) {
-            individuals[i] = new Individual(tmp[i]);
-        }
-        N = allnum;
-    }
 
     public void display() {
-        for(int i = 0; i < N; i++) {
+        for(int i = 0; i < allnum; i++) {
             System.out.println(individuals[i].getFitness());
         }
     }
@@ -187,17 +128,38 @@ public class Population {
         return max;
     }
 
-    public void exch(Individual i,Individual j){
-        Individual temp = new Individual(i);
-        i = new Individual(j);
-        j = new Individual(temp);
+
+    public void updatePopulation() {
+
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     public static void main(String[] args) {
-        Population population = new Population(18,-3.2,12.1,15,4.1,5.8);
-        population.display();
-        System.out.println("********************************");
-        population.individuals = population.betterIndividual();
-        population.display();
+        testPopulation population = new testPopulation(18,-3.2,12.1,15,4.1,5.8);
+
+        for(int i = 0; i < 5; i++) {
+            population.generateChildren(0.6);
+           // population.mutation(0.01);
+            population.updatePopulation();
+            System.out.println("第" + i +"代：" + population.bestFitness());
+            //population.display();
+            if(population.bestFitness() > 38)
+            {
+                System.out.println("*******************************************");
+            }
+        }
     }
 
 

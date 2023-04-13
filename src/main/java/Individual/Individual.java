@@ -23,8 +23,8 @@ public class Individual implements Comparable {
     //fitness用于表现对于函数的适应性
     private double fitness;
 
-    private static double X1;
-    private static double X2;
+    private  double X1;
+    private  double X2;
 
     //初始化，同时计算fitness
     public Individual(int x1Length,double a1,double b1,int x2Length,double a2,double b2) {
@@ -46,6 +46,24 @@ public class Individual implements Comparable {
         //计算fitness
         calculateFitness();
 
+    }
+
+    //Individual通过对象进行初始化
+
+    public Individual(Individual other) {
+        this.geneX1 = other.geneX1;
+        this.geneX1Length = other.geneX1Length;
+        this.a1 = other.a1;
+        this.b1 = other.b1;
+
+        this.geneX2 = other.geneX2;
+        this.geneX2Length = other.geneX2Length;
+        this.a2 = other.a2;
+        this.b2 = other.b2;
+
+        this.fitness = other.fitness;
+        this.X1 = other.X1;
+        this.X2 = other.X2;
     }
 
     //对genX1初始化
@@ -104,7 +122,7 @@ public class Individual implements Comparable {
         //交换X2
         int[] newGeneX2 = cross(this.geneX2, other.geneX2, geneX2Length);
 
-        Individual newIndividual = other;
+        Individual newIndividual = new Individual(other);
         newIndividual.setGeneX1(newGeneX1);
         newIndividual.setGeneX2(newGeneX2);
         newIndividual.calculateFitness();
@@ -112,6 +130,8 @@ public class Individual implements Comparable {
     }
     //通过两点交叉更新数组
     public int[] cross(int[] array,int[] array2,int length) {
+
+        int[] tmp = copy(array,length);
 
         //随机获取两个交叉点进行交换
         Random random = new Random();
@@ -121,12 +141,18 @@ public class Individual implements Comparable {
         int min = Math.min(first,second);
 
         for(int i = min; i < max ; i++){
-            int temp = array[i];
-            array[i] = array2[i];
-            array2[i] = temp;
+            tmp[i] = array2[i];
         }
 
-        return array;
+        return tmp;
+    }
+
+    public int[] copy(int[] array,int length) {
+        int[] tmp = new int[length];
+        for(int i = 0; i < length; i++) {
+            tmp[i] = array[i];
+        }
+        return tmp;
     }
 
     //变异，每个基因位有Pm概率变异
@@ -135,7 +161,7 @@ public class Individual implements Comparable {
         //X1可能会产生变异
         for(int i = 0; i < geneX1Length; i++) {
             if(random.nextDouble() <= Pm) {
-                geneX1[i] = reverse(geneX1[i]);
+               geneX1[i] = reverse(geneX1[i]);
             }
         }
         //X2产生变异
@@ -144,7 +170,8 @@ public class Individual implements Comparable {
                 geneX2[i] = reverse(geneX2[i]);
             }
         }
-        this.fitness = getFitness();
+        //更新fitness
+        calculateFitness();
     }
     //基因翻转
     public int reverse(int a) {
