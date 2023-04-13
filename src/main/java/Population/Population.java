@@ -7,10 +7,10 @@ import java.util.*;
 
 public class Population {
     private Individual[] individuals;
-    private static final int allnum = 400;   //种群最大容量
+    private static final int allnum = 100;   //种群最大容量
     private static int N = allnum;     //种群中目前数目
 
-    private static final int parentNum = 200;   //每次选择20个“父母”
+    private static final int parentNum = 200;   //每次选择100个“父母”
     private int[] Order = new int[2*allnum];
 
     private double[] addFitness;           //第i位存储i位之前所有fitness/sumFitness占比
@@ -122,23 +122,14 @@ public class Population {
         for(int i = 0; i < N; i++) {
             tmp[i] = new Individual(individuals[i]);
         }
-        /*
-        for(int i = 0; i < N; i++) {
-            for(int j = 0; j < N - i - 1; j++) {
-                if(tmp[j].getFitness() < tmp[j+1].getFitness()) {
-                    exch(tmp[j],tmp[j+1]);
-                }
-            }
-        }
-         */
         List<Individual> list = new ArrayList<>();
         for(int i = 0; i < N; i++) {
             list.add(tmp[i]);
         }
         list.sort(Individual::compareTo);
 
-        Individual[] temp = new Individual[10];
-        for(int i = 0; i < 10; i++) {
+        Individual[] temp = new Individual[20];
+        for(int i = 0; i < 20; i++) {
             temp[i] = new Individual(list.get(i));
         }
         return temp;
@@ -176,15 +167,17 @@ public class Population {
             System.out.println(individuals[i].getFitness());
         }
     }
-    public double bestFitness() {
+    public Individual bestFitness() {
+        int maxoffest = 0;
         double max = individuals[0].getFitness();
 
         for(int i = 1; i < allnum; i++) {
             if(individuals[i].getFitness() > max) {
                 max = individuals[i].getFitness();
+                maxoffest = i;
             }
         }
-        return max;
+        return individuals[maxoffest];
     }
 
     public void exch(Individual i,Individual j){
