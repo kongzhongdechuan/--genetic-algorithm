@@ -45,7 +45,7 @@ public class GeneticAlgorithm {
             geneticAlgorithm.updatePopulation();
         }
 
-        for(int i = 0; i < 10000; i++) {
+        for(int i = 0; i < 20000; i++) {
             geneticAlgorithm.setPm(0.0033);
             System.out.println(geneticAlgorithm.population.bestFitness().getFitness() + "  X1:   " + geneticAlgorithm.population.bestFitness().getX1()+"  X2:  "+geneticAlgorithm.population.bestFitness().getX2());
             geneticAlgorithm.updatePopulation();

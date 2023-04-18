@@ -116,7 +116,7 @@ public class Individual implements Comparable {
         this.fitness = new ExperimentFuctions().values(X1,X2);
     }
 
-    public Individual marry(Individual other) {
+    public Individual marrybefore(Individual other) {
         //交换X1
         int[] newGeneX1 = cross(this.geneX1, other.geneX1, geneX1Length);
         //交换X2
@@ -128,6 +128,46 @@ public class Individual implements Comparable {
         newIndividual.calculateFitness();
         return newIndividual;
     }
+    public Individual marry(Individual other) {
+        //合成X1，X2
+        int[] allarray = mix(this.geneX1,geneX1Length,this.geneX2,geneX2Length);
+        int[] allarray2 = mix(other.geneX1, geneX1Length,other.geneX2,geneX2Length);
+
+        int[] endarray = cross(allarray,allarray2,geneX1Length+geneX2Length);
+        //将endarray拆分
+        int[] newGeneX1 = getx1(endarray,geneX1Length,geneX2Length);
+        int[] newGeneX2 = getx2(endarray,geneX1Length,geneX2Length);
+
+        Individual newIndividual = new Individual(other);
+        newIndividual.setGeneX1(newGeneX1);
+        newIndividual.setGeneX2(newGeneX2);
+        newIndividual.calculateFitness();
+        return newIndividual;
+    }
+    public int[] mix(int[] array,int l1,int[] array2,int l2) {
+        int[] allarray = new int[l1+l2];
+        int i = 0;
+        for(int j = 0; j < l1; j++)
+            allarray[i++] = array[j];
+        for(int j = 0; j < l2; j++)
+            allarray[i++] = array2[j];
+        return allarray;
+    }
+    public int[] getx1(int[] array,int l1,int l2) {
+        int[] newx1 = new int[l1];
+        for(int i = 0;i < l1; i++) {
+            newx1[i] = array[i];
+        }
+        return newx1;
+    }
+    public int[] getx2(int[] array,int l1,int l2) {
+        int[] newx2 = new int[l2];
+        for(int i = l1;i < l1+l2; i++) {
+            newx2[i-l1] = array[i];
+        }
+        return newx2;
+    }
+
     //通过两点交叉更新数组
     public int[] cross(int[] array,int[] array2,int length) {
 
