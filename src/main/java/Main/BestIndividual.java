@@ -7,24 +7,14 @@ import java.util.LinkedList;
 
 public class BestIndividual {
     public static void main(String[] args) {
-        /*
-        //测试通过，说明排序没问题
-        Population population = new Population(18,-3.0,12.1,15,4.1,5.8);
-        System.out.println("最好fitness：" + population.bestFitness());
-        population.display();
-        */
-        Individual[] individuals = new Individual[10];
-        for(int i = 0; i < 10; i ++) {
-            individuals[i] = new Individual(18,-3.0,12.1,15,4.1,5.8);
-        }
-        LinkedList<Individual> list  = new LinkedList<>();
-        for(int i = 0; i < 10; i++) {
-            list.add(individuals[i]);
-        }
-        list.sort(Individual::compareTo);
+        //PPT代码输入之后得到结果
+        int[] X1 = {1,1,1,1,0,1,1,1,1,1,1,1,0,1,0,0,1,0};
+        int[] X2 = {1,1,1,1,0,1,0,0,1,0,1,1,0,1,0};
 
-        for(int i = 0; i <10; i ++) {
-            System.out.println(individuals[i].getFitness());
-        }
+        Individual individual = new Individual(18,-3.0,12.1,15,4.1,5.8);
+        individual.setGeneX1(X1);
+        individual.setGeneX2(X2);
+        individual.calculateFitness();
+        System.out.println("The max is :"+individual.getFitness());
     }
 }
