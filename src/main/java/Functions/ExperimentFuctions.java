@@ -9,6 +9,8 @@ public class ExperimentFuctions {
         return x2-x1;
     }
 
+    public double values2(double x1,double x2) { return x2+x1 ;}
+
 
     public static void main(String[] args) {
         System.out.println(new ExperimentFuctions().values(11.6255,5.7250));
