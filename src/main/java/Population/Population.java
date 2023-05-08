@@ -32,7 +32,7 @@ public class Population {
         this.b2 = b2;
 
         //将种群数目初始化最大种群数目的两倍，防止出现数组越界情况
-        individuals = new Individual[2*allnum];
+        individuals = new Individual[4*allnum];
         for(int i = 0; i < allnum; i++) {
             individuals[i] = new Individual(x1Length,a1,b1,x2Length,a2,b2);
         }
@@ -104,12 +104,22 @@ public class Population {
 
 
     //对种群进行概率为Pm的基因变异
-    public void mutation(double Pm) {
+    public void mutation1(double Pm) {
         //对种群中的N个个体进行变异
         for(int i = 0; i < N; i++) {
             //System.out.println("*************"+individuals[i].getFitness());
             individuals[i].mutation(Pm);
             //System.out.println("****************" + individuals[i].getFitness());
+        }
+    }
+
+    public void mutation(double Pm){
+        int end = N;
+        for(int i = allnum; i < end; i++)
+        {
+            individuals[N] = individuals[i];
+            individuals[N].mutation(Pm);
+            N++;
         }
     }
 

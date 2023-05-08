@@ -238,7 +238,22 @@ public class Individual implements Comparable {
         this.geneX2 = geneX2;
     }
 
-
+    public void displayX1()
+    {
+        for(int i = 0;i < geneX1Length; i++)
+        {
+            System.out.print(geneX1[i]);
+        }
+        System.out.println();
+    }
+    public void displayX2()
+    {
+        for(int i = 0;i < geneX2Length; i++)
+        {
+            System.out.print(geneX2[i]);
+        }
+        System.out.println();
+    }
 
     //List降序排列
     @Override

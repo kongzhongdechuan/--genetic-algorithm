@@ -39,17 +39,27 @@ public class GeneticAlgorithm {
     public static void main(String[] args) {
         GeneticAlgorithm geneticAlgorithm = new GeneticAlgorithm();
 
-        for(int i = 0; i < 5000; i++) {
+        for(int i = 0; i < 100; i++) {
             geneticAlgorithm.setPm(0.01);
             System.out.println(geneticAlgorithm.population.bestFitness().getFitness() + "  X1:   " + geneticAlgorithm.population.bestFitness().getX1()+"  X2:  "+geneticAlgorithm.population.bestFitness().getX2());
             geneticAlgorithm.updatePopulation();
         }
 
-        for(int i = 0; i < 20000; i++) {
+        for(int i = 0; i < 1000; i++) {
             geneticAlgorithm.setPm(0.0033);
             System.out.println(geneticAlgorithm.population.bestFitness().getFitness() + "  X1:   " + geneticAlgorithm.population.bestFitness().getX1()+"  X2:  "+geneticAlgorithm.population.bestFitness().getX2());
             geneticAlgorithm.updatePopulation();
         }
+
+        System.out.println();
+        System.out.println();
+        Individual best = new Individual(geneticAlgorithm.population.bestFitness());
+        System.out.println("The best fitness is:    " + best.getFitness());
+        System.out.print("X1: " + best.getX1() + "   ");
+        best.displayX1();
+        System.out.print("X2: " + best.getX2() + "    ");
+        best.displayX2();
+
 
 
     }
