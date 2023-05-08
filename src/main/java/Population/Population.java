@@ -7,10 +7,10 @@ import java.util.*;
 
 public class Population {
     private Individual[] individuals;
-    private static final int allnum = 100;   //种群最大容量
+    private static final int allnum = 600;   //种群最大容量
     private static int N = allnum;     //种群中目前数目
 
-    private static final int parentNum = 200;   //每次选择100个“父母”
+    private static final int parentNum = 400;   //每次选择200个“父母”
     private int[] Order = new int[2*allnum];
 
     private double[] addFitness;           //第i位存储i位之前所有fitness/sumFitness占比
