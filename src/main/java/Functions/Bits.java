@@ -25,7 +25,7 @@ public class Bits {
     }
     */
     //寻找区间[a,b],精度为precision的总位数
-    public int getBits(float a,float b,double precision) {
+    public int getBits(double a,double b,double precision) {
         int m = 1;
         int end = (int) ((b-a)/precision);
         while(Math.pow(2,m-1) < end + 1)

@@ -7,7 +7,7 @@ import java.util.*;
 
 public class Population {
     private Individual[] individuals;
-    private static final int allnum = 800;   //种群最大容量
+    private static final int allnum = 400;   //种群最大容量
     private static int N = allnum;     //种群中目前数目
 
     private static final int parentNum = 400;   //每次选择200个“父母”
